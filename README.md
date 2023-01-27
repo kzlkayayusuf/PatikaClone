@@ -1,2 +1,9 @@
 # PatikaClone
-Patikadev Java102 Patika Klonu
+
+This project is a simple desktop clone of [patika.dev](https://app.patika.dev/)
+
+# Used Technologies
+- Java
+- Swing
+- JDBC
+- MySQL
