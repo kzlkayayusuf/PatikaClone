@@ -2,14 +2,15 @@ import com.patikadev.helper.Helper;
 import com.patikadev.model.Operator;
 import com.patikadev.view.OperatorGUI;
 
-import javax.swing.*;
 
 public class Main {
     public static void main(String[] args) {
         //yüklü temaları göster
+        /*
         for(UIManager.LookAndFeelInfo info:  UIManager.getInstalledLookAndFeels()){
             System.out.println(info.getName()+" => "+info.getClassName());
         }
+         */
 
         Helper.setLayout();
         Operator operator=new Operator();
