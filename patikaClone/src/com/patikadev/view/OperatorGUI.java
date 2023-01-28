@@ -7,6 +7,9 @@ import com.patikadev.model.User;
 import javax.swing.*;
 import javax.swing.event.TableModelEvent;
 import javax.swing.table.DefaultTableModel;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Objects;
 
@@ -28,6 +31,10 @@ public class OperatorGUI extends JFrame {
     private JButton btn_user_add;
     private JTextField tfld_user_id;
     private JButton btn_user_delete;
+    private JTextField tfld_search_user_name;
+    private JTextField tfld_search_username;
+    private JComboBox cmb_search_user_type;
+    private JButton btn_search_user;
     private DefaultTableModel mdl_user_list;
     private Object[] row_user_list;
 
@@ -37,7 +44,7 @@ public class OperatorGUI extends JFrame {
         this.operator=operator;
 
         add(wrapper);
-        setSize(1000,500);
+        setSize(1000,550);
         setLocation(Helper.screenCenter("x",getSize()),Helper.screenCenter("y",getSize()));
         setDefaultCloseOperation(JFrame.DISPOSE_ON_CLOSE);
         setTitle(Config.PROJECT_TITLE);
@@ -132,6 +139,25 @@ public class OperatorGUI extends JFrame {
                 }
             }
         });
+
+        btn_search_user.addActionListener(e -> {
+            String name = "", surname = "";
+            if (!tfld_search_user_name.getText().isEmpty()) {
+                name = tfld_search_user_name.getText().split(" ")[0];
+                if (tfld_search_user_name.getText().split(" ").length > 1)
+                    surname = tfld_search_user_name.getText().split(" ")[1];
+            }
+
+            String userName = tfld_search_username.getText();
+            String type = Objects.requireNonNull(cmb_search_user_type.getSelectedItem()).toString();
+            String query = User.searchQuery(userName, name, surname, type);
+
+            loadUserModel(User.searchUserList(query));
+        });
+
+        btn_exit.addActionListener(e -> {
+            dispose();
+        });
     }
 
     private void loadUserModel() {
@@ -139,6 +165,24 @@ public class OperatorGUI extends JFrame {
         clearModel.setRowCount(0);
 
         for (User user : User.getList()) {
+            int i = 0;
+            row_user_list[i++] = user.getId();
+            row_user_list[i++] = user.getLastName();
+            row_user_list[i++] = user.getFirstName();
+            row_user_list[i++] = user.getUserName();
+            row_user_list[i++] = user.getUserPassword();
+            row_user_list[i] = user.getUserType();
+
+            mdl_user_list.addRow(row_user_list);
+
+        }
+    }
+
+    private void loadUserModel(ArrayList<User> users) {
+        DefaultTableModel clearModel = (DefaultTableModel) tbl_user_list.getModel();
+        clearModel.setRowCount(0);
+
+        for (User user : users) {
             int i = 0;
             row_user_list[i++] = user.getId();
             row_user_list[i++] = user.getLastName();

@@ -199,4 +199,38 @@ public class User {
         }
         return true;
     }
+
+    public static ArrayList<User> searchUserList(String query){
+        ArrayList<User> userList=new ArrayList<>();
+        User obj;
+        try {
+            Statement statement= DBConnector.getInstance().createStatement();
+            ResultSet resultSet=statement.executeQuery(query);
+            while (resultSet.next()){
+                obj=new User();
+                obj.setId(resultSet.getInt("id"));
+                obj.setFirstName(resultSet.getString("firstName"));
+                obj.setLastName(resultSet.getString("lastName"));
+                obj.setUserName(resultSet.getString("userName"));
+                obj.setUserType(resultSet.getString("userType"));
+                obj.setUserPassword(resultSet.getString("userPassword"));
+                userList.add(obj);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return userList;
+    }
+
+    public static String searchQuery(String userName,String firstName,String lastName,String userType){
+        String query="SELECT * FROM users WHERE userName LIKE '%{{userName}}%' AND firstName LIKE '%{{firstName}}%' AND lastName LIKE '%{{lastName}}%' AND userType LIKE '%{{userType}}%'";
+        query=query.replace("{{userName}}",userName);
+        query=query.replace("{{firstName}}",firstName);
+        query=query.replace("{{lastName}}",lastName);
+        userType= userType.equals("instructor") ? "ınstructor" : userType;
+        query=query.replace("{{userType}}",userType);
+
+        return query;
+    }
 }
