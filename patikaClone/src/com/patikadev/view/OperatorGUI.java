@@ -112,7 +112,7 @@ public class OperatorGUI extends JFrame {
                     passwordField.setText(null);
                 }
 
-                System.out.println("Added to DB");
+                //System.out.println("Added to DB");
             }
         });
 
@@ -123,7 +123,7 @@ public class OperatorGUI extends JFrame {
                 if(Helper.confirm("sure")){
                     int userId = Integer.parseInt(tfld_user_id.getText());
                     if (User.delete(userId)) {
-                        Helper.showMessage("success");
+                        Helper.showMessage("deleted");
                         loadUserModel();
                         tfld_user_id.setText(null);
                     } else {

@@ -48,9 +48,17 @@ public class Helper {
                 msg = "Successfully added to database";
                 title = "SUCCESS";
             }
+            case "deleted" -> {
+                msg = "Successfully deleted from database";
+                title = "SUCCESS";
+            }
             case "updated" -> {
                 msg = "Successfully updated";
                 title = "SUCCESS";
+            }
+            case "wrongUserType" -> {
+                msg = "User Type Not Match 'OPERATOR,INSTRUCTOR or STUDENT'";
+                title = "ERROR!";
             }
             case "error" -> {
                 msg = "Not added to database";

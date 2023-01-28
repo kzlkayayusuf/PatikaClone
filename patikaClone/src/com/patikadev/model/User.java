@@ -8,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class User {
     private int id;
@@ -167,6 +169,18 @@ public class User {
     public static boolean update(int id,String lastName,String firstName,String userName,String userPassword,String userType){
         String query="UPDATE users SET lastName=?,firstName=?,userName=?,userPassword=?,userType=? WHERE id=?";
         User findUser= User.getFetch(userName);
+        List<String> types= Arrays.asList("OPERATOR","INSTRUCTOR","STUDENT","İNSTRUCTOR");
+        int result=0;
+        for (String type:types) {
+            if(type.equals(userType.toUpperCase())){
+                userType= userType.equals("instructor") ? "INSTRUCTOR" : userType;
+                result++;
+            }
+        }
+        if(result==0){
+            Helper.showMessage("wrongUserType");
+            return false;
+        }
         if(findUser!=null && findUser.getId() !=id){
             Helper.showMessage("duplicatedUserName");
             return false;
