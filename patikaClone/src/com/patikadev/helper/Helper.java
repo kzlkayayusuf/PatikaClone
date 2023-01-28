@@ -44,7 +44,7 @@ public class Helper {
                 msg = "Please fill all field";
                 title = "ERROR!";
             }
-            case "success" -> {
+            case "added" -> {
                 msg = "Successfully added to database";
                 title = "SUCCESS";
             }

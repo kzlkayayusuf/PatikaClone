@@ -103,6 +103,30 @@ public class User {
         return userList;
     }
 
+    public static ArrayList<User> getListOnlyInstructors(){
+        ArrayList<User> userList=new ArrayList<>();
+        String query="SELECT * FROM users WHERE userType='INSTRUCTOR'";
+        User obj;
+        try {
+            Statement statement= DBConnector.getInstance().createStatement();
+            ResultSet resultSet=statement.executeQuery(query);
+            while (resultSet.next()){
+                obj=new User();
+                obj.setId(resultSet.getInt("id"));
+                obj.setFirstName(resultSet.getString("firstName"));
+                obj.setLastName(resultSet.getString("lastName"));
+                obj.setUserName(resultSet.getString("userName"));
+                obj.setUserType(resultSet.getString("userType"));
+                obj.setUserPassword(resultSet.getString("userPassword"));
+                userList.add(obj);
+            }
+
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        return userList;
+    }
+
     public static boolean addDb(String lastName,String firstName,String userName,String userPassword,String userType){
         String query="INSERT INTO users (lastName,firstName,userName,userPassword,userType) VALUES (?,?,?,?,?)";
         User findUser= User.getFetch(userName);
@@ -153,12 +177,69 @@ public class User {
         return user;
     }
 
+    public static User getFetch(int id){
+        User user=null;
+        String query="SELECT * FROM users WHERE id=?";
+
+        try {
+            PreparedStatement ps= DBConnector.getInstance().prepareStatement(query);
+            ps.setInt(1,id);
+            ResultSet rs= ps.executeQuery();
+            if (rs.next()){
+                user=new User();
+                user.setId(rs.getInt("id"));
+                user.setFirstName(rs.getString("firstName"));
+                user.setLastName(rs.getString("lastName"));
+                user.setUserName(rs.getString("userName"));
+                user.setUserType(rs.getString("userType"));
+                user.setUserPassword(rs.getString("userPassword"));
+
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return user;
+    }
+
+    public static User getFetch(String userName,String password){
+        User user=null;
+        String query="SELECT * FROM users WHERE userName = ? AND userPassword = ?";
+
+        try {
+            PreparedStatement ps= DBConnector.getInstance().prepareStatement(query);
+            ps.setString(1,userName);
+            ps.setString(2,password);
+            ResultSet rs= ps.executeQuery();
+            if (rs.next()){
+                switch (rs.getString("userType")) {
+                    case "STUDENT" -> user=new Student();
+                    case "INSTRUCTOR" -> user=new Instructor();
+                    case "OPERATOR" -> user=new Operator();
+                    default -> user=new User();
+                }
+                user.setId(rs.getInt("id"));
+                user.setFirstName(rs.getString("firstName"));
+                user.setLastName(rs.getString("lastName"));
+                user.setUserName(rs.getString("userName"));
+                user.setUserType(rs.getString("userType"));
+                user.setUserPassword(rs.getString("userPassword"));
+
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return user;
+    }
+
     public static boolean delete(int id){
         String query="DELETE FROM users WHERE id=?";
+        ArrayList<Course> courseList= Course.getListByUserId(id);
+        for (Course c:courseList) {
+            Course.delete(c.getId());
+        }
         try {
             PreparedStatement ps=DBConnector.getInstance().prepareStatement(query);
             ps.setInt(1,id);
-
             return ps.executeUpdate() !=-1 ;
         } catch (SQLException e) {
             System.out.println(e.getMessage());
