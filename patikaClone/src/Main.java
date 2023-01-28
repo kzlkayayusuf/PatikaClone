@@ -1,6 +1,5 @@
 import com.patikadev.helper.Helper;
-import com.patikadev.model.Operator;
-import com.patikadev.view.OperatorGUI;
+import com.patikadev.view.LoginGUI;
 
 
 public class Main {
@@ -10,7 +9,7 @@ public class Main {
         for(UIManager.LookAndFeelInfo info:  UIManager.getInstalledLookAndFeels()){
             System.out.println(info.getName()+" => "+info.getClassName());
         }
-         */
+
 
         Helper.setLayout();
         Operator operator=new Operator();
@@ -21,5 +20,9 @@ public class Main {
         operator.setUserPassword("123456");
         operator.setUserType("OPERATOR");
         OperatorGUI operatorGUI=new OperatorGUI(operator);
+         */
+
+        Helper.setLayout();
+        LoginGUI loginGUI=new LoginGUI();
     }
 }

@@ -65,7 +65,11 @@ public class Helper {
                 title = "ERROR!";
             }
             case "duplicatedUserName" ->{
-                msg="That userName exists, Please re-enter";
+                msg="That username exists, Please re-enter";
+                title="ERROR!";
+            }
+            case "userNotExists" ->{
+                msg="That username not exists!, Please re-enter";
                 title="ERROR!";
             }
             default -> {
